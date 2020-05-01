@@ -8,22 +8,32 @@ import (
 
 const englishHelloPrefix = "Hello, "
 
-// Hello : An abstracted function, whichgo  is easier to test
-func Hello(name string) string {
+var greetings = map[string]string{
+	"English": "Hello, ",
+	"Spanish": "Hola, ",
+	"Hindi":   "Namaste, "}
+
+// Hello : An abstracted function, which is easier to test
+func Hello(name string, lang string) string {
 	if name == "" {
 		name = "World"
 	}
-	return englishHelloPrefix + name + "!"
+
+	return greetings[lang] + name + "!"
 }
 
 func main() {
 
-	if len(os.Args) > 1 {
+	if len(os.Args) > 2 {
 		name := os.Args[1]
-		fmt.Println(Hello(name))
+		lang := os.Args[2]
+		if _, ok := greetings[lang]; !ok {
+			lang = "English"
+		}
+		fmt.Println(Hello(name, lang))
 	} else {
-		log.Print("Name argument not provided, using default.")
-		fmt.Println(Hello("Apurv"))
+		log.Print("Some arguments not provided, using default.")
+		fmt.Println(Hello("Apurv", "English"))
 	}
 
 }
