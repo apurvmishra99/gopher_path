@@ -3,33 +3,44 @@ package structs
 import "testing"
 
 func TestPerimeter(t *testing.T) {
-	rect := Rectangle{10.0, 10.0}
-	got := Perimeter(rect)
-	want := 40.0
 
-	if got != want {
-		t.Errorf("got %.2f but wanted %.2f", got, want)
+	perimeterTests := []struct {
+		name         string
+		shape        Shape
+		hasPerimeter float64
+	}{
+		{name: "Rectangle", shape: Rectangle{Height: 12, Width: 6}, hasPerimeter: 36.0},
+		{name: "Circle", shape: Circle{Radius: 9}, hasPerimeter: 56.548667764616276},
+	}
+
+	for _, tt := range perimeterTests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := tt.shape.Perimeter()
+			if got != tt.hasPerimeter {
+				t.Errorf("%#v got %g but wanted %g", tt.shape, got, tt.hasPerimeter)
+			}
+		})
 	}
 }
 
 func TestArea(t *testing.T) {
 
-	checkArea := func(t *testing.T, shape Shape, want float64) {
-		t.Helper()
-		got := shape.Area()
-		if got != want {
-			t.Errorf("got %g but wanted %g", got, want)
-		}
+	areaTests := []struct {
+		name    string
+		shape   Shape
+		hasArea float64
+	}{
+		{name: "Rectangle", shape: Rectangle{Height: 12, Width: 6}, hasArea: 72.0},
+		{name: "Circle", shape: Circle{Radius: 9}, hasArea: 254.46900494077323},
+		{name: "Triangle", shape: Triangle{a: 12, b: 5, c: 13}, hasArea: 30.0},
 	}
 
-	t.Run("calc area for rectangle", func(t *testing.T) {
-		rect := Rectangle{12.0, 6.0}
-		checkArea(t, rect, 72.0)
-	})
-
-	t.Run("calc area for circle", func(t *testing.T) {
-		circ := Circle{9.0}
-		checkArea(t, circ, 254.46900494077323)
-	})
-
+	for _, tt := range areaTests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := tt.shape.Area()
+			if got != tt.hasArea {
+				t.Errorf("%#v got %g but wanted %g", tt.shape, got, tt.hasArea)
+			}
+		})
+	}
 }
